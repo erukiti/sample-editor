@@ -1,26 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useContext } from "react";
 
-const App: React.FC = () => {
+import { FirebaseContext } from "./Firebase";
+import { FirebaseAuth, signInWithRedirect, signOut } from "./FirebaseAuth";
+
+const Content: React.FC = () => {
+  const { userId, userName } = useContext(FirebaseContext);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {userName} ({userId}) is signedIn
     </div>
   );
-}
+};
+
+const App: React.FC = () => {
+  const NotSignedIn = React.useCallback(() => {
+    return <button onClick={() => signInWithRedirect()}>signIn</button>;
+  }, []);
+  const Loading = React.useCallback(() => {
+    return <div>loading now....</div>;
+  }, []);
+
+  return (
+    <FirebaseAuth NotSignedIn={NotSignedIn} Loading={Loading}>
+      <Content />
+      <button onClick={signOut}>sign out</button>
+    </FirebaseAuth>
+  );
+};
 
 export default App;
