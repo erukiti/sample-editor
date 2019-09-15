@@ -91,7 +91,7 @@ function useUpdateDocument<T = any>(ref: database.Reference) {
           setPending(false);
         });
         timerRef.current = undefined;
-      }, 2000);
+      }, 500);
     },
     [ref]
   );
